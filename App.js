@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, StatusBar} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux'
 import { createStore, combineReducers } from 'redux';
@@ -9,9 +9,8 @@ import {purple} from "./utils/colors";
 import decks from './decks/reducer'
 import flashCards from './flashcards/reducer'
 import ViewDeck from "./decks/components/ViewDeck";
-import AddDeck from "./decks/components/ViewDeck";
+import AddDeck from "./decks/components/AddDeck";
 import { AddButtonInHeader } from './GeneralComponents';
-
 
 const store = createStore(
   combineReducers({
@@ -29,7 +28,7 @@ function CustomStatusBar ({backgroundColor, ...props}) {
 }
 
 const MainNavigator = StackNavigator({
-  Decks: {
+  DeckList: {
     screen: DeckList,
     navigationOptions: ({navigation}) => {
 
@@ -39,15 +38,16 @@ const MainNavigator = StackNavigator({
       };
     },
   },
-  ViewDeck: {
-    screen: ViewDeck,
-  },
   AddDeck: {
     screen: AddDeck,
     navigationOptions: {
-      headerTitle: 'Add Deck',
+      headerTitle: 'New Deck',
     }
+  },
+  ViewDeck: {
+    screen: ViewDeck,
   }
+
 });
 
 export default class App extends React.Component {
