@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
-import {getAllDecks} from "../actions";
+import { loadDecks} from "../actions";
 import {gray, lightGray, borderColor} from "../../utils/colors";
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
 import {Platform} from 'react-native'
@@ -63,7 +63,7 @@ function Item({item, navigation}) {
   return (
     <TouchableOpacity style={ListItemStyle.container}
                       onPress={() => onPressItem(item)}>
-      <Text style={styles.title}>{item.name}</Text>
+      <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.counter}>{item.cardsCount} cards</Text>
     </TouchableOpacity>
   );
@@ -112,7 +112,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getDecks: () => getAllDecks(dispatch)
+  getDecks: () => loadDecks(dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeckList);

@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {getAllDecks} from "../actions";
 import {gray, lightGray, borderColor} from "../../utils/colors";
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
-import {Platform} from 'react-native'
 
 
 class ViewDeck extends Component {
