@@ -54,9 +54,9 @@ const ListItemStyle = StyleSheet.create({
 
 function Item({item, navigation}) {
 
-  function onPressItem(){
+  function onPressItem(item){
     navigation && navigation.dispatch(
-      NavigationActions.navigate({ routeName: 'ViewDeck' })
+      NavigationActions.navigate({ routeName: 'ViewDeck', params:{deck: item}})
     );
   }
 

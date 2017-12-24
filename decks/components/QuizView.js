@@ -1,25 +1,23 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
+import {getAllDecks} from "../actions";
 import {gray, lightGray, borderColor, orange, green} from "../../utils/colors";
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
-import {NavigationActions} from 'react-navigation'
 
-
-class ViewDeck extends Component {
+class QuizView extends Component {
   constructor() {
     super();
-    this.navigateTo = this.navigateTo.bind(this);
   }
 
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: navigation.state.params.deck.title
   });
 
-  navigateTo(screen, params = {}){
-    const {navigation} = this.props;
-
+  navigateTo(screen, parameters = {}){
+    const {navigation} = this.props.navigation;
     navigation && navigation.dispatch(
-      NavigationActions.navigate({ routeName: screen, params: params})
+      NavigationActions.navigate({ routeName: 'ViewDeck', params:{deck: item}})
     );
   }
 
@@ -27,20 +25,7 @@ class ViewDeck extends Component {
     const {deck} = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{deck.title}</Text>
-        <Text style={styles.counter}>{deck.cardsCount} cards</Text>
-        <View style={styles.controls}>
-          <TouchableOpacity
-            onPress={() => this.navigateTo('AddCard')}
-            style={[styles.buttons, styles.addCardButton]}>
-            <Text style={[styles.buttonsText]}>Add Card</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.navigateTo('QuizView', {deck: deck})}
-            style={[styles.buttons,styles.startQuizButton]}>
-            <Text style={[styles.buttonsText]}>Start Quiz</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.title}>Quiz for: {deck.title}</Text>
       </View>
     );
   }
@@ -83,4 +68,12 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ViewDeck;
+const mapStateToProps = (state, props) => ({
+  decks: state.decks
+});
+
+const mapDispatchToProps = dispatch => ({
+  getDecks: () => getAllDecks(dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizView);
