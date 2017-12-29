@@ -15,8 +15,13 @@ class ViewDeck extends Component {
     title: navigation.state.params.deck.title
   });
 
+  onSelect = data => {
+    this.setState(data);
+  };
+
   navigateTo(screen, params = {}){
     const {navigation} = this.props;
+    params.onSelect = this.onSelect;
 
     navigation && navigation.dispatch(
       NavigationActions.navigate({ routeName: screen, params: params})
@@ -31,7 +36,7 @@ class ViewDeck extends Component {
         <Text style={styles.counter}>{deck.cardsCount} cards</Text>
         <View style={styles.controls}>
           <TouchableOpacity
-            onPress={() => this.navigateTo('AddCard')}
+            onPress={() => this.navigateTo('AddCard', {deck: deck})}
             style={[styles.buttons, styles.addCardButton]}>
             <Text style={[styles.buttonsText]}>Add Card</Text>
           </TouchableOpacity>

@@ -15,7 +15,6 @@ export default function decks (state = [], action){
     case ADD_DECK:
       const { deckInfo } = action;
       deckInfo.isDeleted = false;
-      deckInfo.cards = [];
 
       return {
         ...state,
