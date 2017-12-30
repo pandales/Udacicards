@@ -9,6 +9,9 @@ import {purple} from "./utils/colors";
 import decks from './decks/reducer'
 import ViewDeck from "./decks/components/ViewDeck";
 import AddDeck from "./decks/components/AddDeck";
+import AddCard from "./decks/components/AddCard";
+import QuizView from "./decks/components/QuizView";
+
 import { AddButtonInHeader } from './GeneralComponents';
 import { setLocalNotification } from './utils/helpers';
 
@@ -45,6 +48,12 @@ const MainNavigator = StackNavigator({
   },
   ViewDeck: {
     screen: ViewDeck,
+  },
+  AddCard: {
+    screen: AddCard,
+  },
+  QuizView: {
+    screen: QuizView,
   }
 
 });
