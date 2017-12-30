@@ -7,15 +7,14 @@ import DeckList from './decks/components/DeckList'
 import { Constants } from 'expo';
 import {purple} from "./utils/colors";
 import decks from './decks/reducer'
-import flashCards from './flashcards/reducer'
 import ViewDeck from "./decks/components/ViewDeck";
 import AddDeck from "./decks/components/AddDeck";
 import { AddButtonInHeader } from './GeneralComponents';
+import { setLocalNotification } from './utils/helpers';
 
 const store = createStore(
   combineReducers({
-    decks,
-    flashCards,
+    decks
   })
 );
 
@@ -51,6 +50,10 @@ const MainNavigator = StackNavigator({
 });
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
+
   render() {
     return (
       <Provider store={store}>
@@ -68,6 +71,5 @@ const styles = StyleSheet.create({
     flex: 1
   },
   list: {
-
   }
 });
