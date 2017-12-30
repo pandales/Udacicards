@@ -18,18 +18,30 @@ export function addDeck (title) {
   const deckToAdd = {
     title,
     cardsCount: 0,
-    id: createGuid()
+    id: createGuid(),
+    cards: []
   };
 
   return getDecks(DECK_INDEX).then(decks => {
 
-    console.log(decks);
     decks[deckToAdd.id] = deckToAdd;
     return decks;
   }).then(decks => {
     return AsyncStorage.setItem(DECK_INDEX, JSON.stringify(decks)).then(() => decks);
   });
+}
 
+export function addCard (updatedDeck) {
+
+
+  return getDecks(DECK_INDEX).then(decks => {
+    decks[updatedDeck.id] = updatedDeck;
+
+    return decks;
+  }).then(decks => {
+    console.log(decks);
+    return AsyncStorage.setItem(DECK_INDEX, JSON.stringify(decks)).then(() => decks);
+  });
 }
 
 export function removeEntry (key) {

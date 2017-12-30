@@ -54,14 +54,14 @@ const ListItemStyle = StyleSheet.create({
 
 function Item({item, navigation}) {
 
-  function onPressItem(){
+  function onPressItem(item){
     navigation && navigation.dispatch(
-      NavigationActions.navigate({ routeName: 'ViewDeck' })
+      NavigationActions.navigate({ routeName: 'ViewDeck', params:{deck: item}})
     );
   }
 
   return (
-    <TouchableOpacity style={ListItemStyle.container}
+    <TouchableOpacity key={item.id} style={ListItemStyle.container}
                       onPress={() => onPressItem(item)}>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.counter}>{item.cardsCount} cards</Text>
@@ -88,7 +88,7 @@ class DeckList extends Component {
 
     return (
       <FlatList data={decks}
-                keyExtractor={(item, index) => item.id}
+                keyExtractor={(item, index) => index}
                 renderItem={({item}) => <Item
                   item={item}
                   navigation={this.props.navigation} />}
