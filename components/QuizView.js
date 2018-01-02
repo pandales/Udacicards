@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {getAllDecks} from "../actions";
-import {gray, lightGray, borderColor, white, red, green} from "../../utils/colors";
+import {clearLocalNotification, setLocalNotification} from '../../utils';
+import { borderColor, white, red, green} from "../../utils/colors";
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import {NavigationActions} from 'react-navigation';
 
@@ -53,6 +54,10 @@ class QuizView extends Component {
       this.setState({
         quizEnded: true
       });
+
+      // I decided clear the notification wherever a user finish a quiz.
+      clearLocalNotification()
+        .then(setLocalNotification)
     }
   }
 
