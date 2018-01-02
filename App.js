@@ -1,19 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, StatusBar} from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
 import { Provider } from 'react-redux'
 import { createStore, combineReducers } from 'redux';
-import DeckList from './decks/components/DeckList'
+import DeckList from './components/DeckList'
 import { Constants } from 'expo';
 import {purple} from "./utils/colors";
-import decks from './decks/reducer'
-import ViewDeck from "./decks/components/ViewDeck";
-import AddDeck from "./decks/components/AddDeck";
-import AddCard from "./decks/components/AddCard";
-import QuizView from "./decks/components/QuizView";
+import decks from './reducer/index'
+import ViewDeck from "./components/ViewDeck";
+import AddDeck from "./components/AddDeck";
+import AddCard from "./components/AddCard";
+import QuizView from "./components/QuizView";
+import { MaterialCommunityIcons, Ionicons, Entypo} from '@expo/vector-icons'
 
 import { AddButtonInHeader } from './GeneralComponents';
-import { setLocalNotification } from './utils/helpers';
+import { setLocalNotification, clearLocalNotification } from './utils/helpers';
 
 const store = createStore(
   combineReducers({
@@ -28,7 +29,27 @@ function CustomStatusBar ({backgroundColor, ...props}) {
     </View>
   )
 }
-
+const DeckNavigator = TabNavigator({
+  ViewDeck: {
+    screen: ViewDeck,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Entypo name='archive' size={30} color={tintColor} />
+    },
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      tabBarLabel: 'Add Card',
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='cards-outline' size={30} color={tintColor} />
+    },
+  },
+  QuizView: {
+    screen: QuizView,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Entypo name='open-book' size={30} color={tintColor} />
+    },
+  }
+});
 const MainNavigator = StackNavigator({
   DeckList: {
     screen: DeckList,
@@ -46,21 +67,17 @@ const MainNavigator = StackNavigator({
       headerTitle: 'New Deck',
     }
   },
-  ViewDeck: {
-    screen: ViewDeck,
+  ViewDeckTab: {
+    screen: DeckNavigator,
   },
-  AddCard: {
-    screen: AddCard,
-  },
-  QuizView: {
-    screen: QuizView,
-  }
 
 });
 
 export default class App extends React.Component {
   componentDidMount() {
-    setLocalNotification()
+    // clearLocalNotification()
+    //   .then(setLocalNotification)
+    setLocalNotification();
   }
 
   render() {

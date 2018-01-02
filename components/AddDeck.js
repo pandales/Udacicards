@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView,View, Text, StyleSheet, TextInput,
-  Keyboard, TouchableOpacity} from 'react-native';
+import {
+  KeyboardAvoidingView, View, Text, StyleSheet, TextInput,
+  Keyboard, TouchableOpacity
+} from 'react-native';
 import {connect} from 'react-redux';
-import {getAllDecks} from "../actions";
-import {addDeck} from "../../utils/api";
-import {gray, lightGray, borderColor, blue, red} from "../../utils/colors";
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
-import { NavigationActions } from 'react-navigation';
-
+import {getAllDecks} from "../actions/index";
+import {addDeck} from "../utils/api";
+import {gray, lightGray, borderColor, blue, red} from "../utils/colors";
+import {MaterialIcons, Ionicons} from '@expo/vector-icons';
+import {NavigationActions} from 'react-navigation';
 
 
 class AddDeck extends Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
       title: '',
@@ -22,21 +23,20 @@ class AddDeck extends Component {
     this.handleTitleChange = this.handleTitleChange.bind(this);
   }
 
-  saveDeck(){
+  saveDeck() {
     Keyboard.dismiss();
     this.setState({title: ''});
 
     const {updateStore, navigation} = this.props;
 
     addDeck(this.state.title)
-       .then(decks => updateStore(decks));
-
-    navigation.dispatch(
-      NavigationActions.navigate({ routeName: 'DeckList'})
-    );
+      .then(decks => {
+        navigation.goBack();
+        updateStore(decks)}
+      );
   };
 
-  handleTitleChange(title){
+  handleTitleChange(title) {
     this.setState({title});
     this.setState({isUnique: this._isTitleUnique(title)});
   }
@@ -59,11 +59,13 @@ class AddDeck extends Component {
         <TextInput
           style={styles.input}
           placeholder={'Deck Title'}
-          onChangeText={(title) => {this.handleTitleChange(title)}}
+          onChangeText={(title) => {
+            this.handleTitleChange(title)
+          }}
           value={title}
         />
 
-        <Text stlye={{fontSize: 12, color: red}}>{!isUnique? 'There is another deck with this title': ''}</Text>
+        <Text stlye={{fontSize: 12, color: red}}>{!isUnique ? 'There is another deck with this title' : ''}</Text>
 
         <View style={styles.controlContainer}>
           <TouchableOpacity
@@ -79,7 +81,6 @@ class AddDeck extends Component {
             onPress={() => Keyboard.dismiss()}>
             <Text style={styles.buttonsText}>Cancel</Text></TouchableOpacity>
         </View>
-
 
 
       </KeyboardAvoidingView>

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {FlatList, View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import {FlatList, View, Text, StyleSheet, TextInput, TouchableOpacity, Animated} from 'react-native';
 import {connect} from 'react-redux';
-import { loadDecks} from "../actions";
-import {gray, lightGray, borderColor} from "../../utils/colors";
-import { MaterialIcons, Ionicons } from '@expo/vector-icons'
+import {loadDecks} from "../actions/index";
+import {gray, lightGray, borderColor} from "../utils/colors";
+import {MaterialIcons, Ionicons} from '@expo/vector-icons'
 import {Platform} from 'react-native'
-import { NavigationActions } from 'react-navigation';
+import {NavigationActions} from 'react-navigation';
 
 const SearchBarStyles = StyleSheet.create({
   container: {
@@ -29,16 +29,17 @@ const SearchBarStyles = StyleSheet.create({
   },
 });
 
-function SearchBar(props) {
+function SearchBar({text, filterDecks}) {
 
   return (
     <View style={SearchBarStyles.container}>
       {Platform.OS === 'ios'
-      ?<Ionicons style={SearchBarStyles.icon} name={'ios-search-outline'}/>
-      : <MaterialIcons style={SearchBarStyles.icon} name={'search'}/>}
+        ? <Ionicons style={SearchBarStyles.icon} name={'ios-search-outline'}/>
+        : <MaterialIcons style={SearchBarStyles.icon} name={'search'}/>}
       <TextInput
         style={SearchBarStyles.input}
-        value={props.text}
+        onChangeText={(text) => filterDecks(text)}
+        value={text}
         placeholder={'Search...'}
         placeholderTextColor={gray}/>
     </View>
@@ -48,16 +49,30 @@ function SearchBar(props) {
 const ListItemStyle = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomColor: borderColor,
+    borderTopWidth: 0,
+    borderBottomWidth: 1,
+    padding: 5,
+
   }
 });
 
-function Item({item, navigation}) {
+function Item({item, navigation, opacity, onSelect}) {
 
-  function onPressItem(item){
-    navigation && navigation.dispatch(
-      NavigationActions.navigate({ routeName: 'ViewDeck', params:{deck: item}})
-    );
+  function onPressItem(item) {
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 800
+    }).start(() => {
+      navigation && navigation.dispatch(
+        NavigationActions.navigate({routeName: 'ViewDeckTab', params: {deck: item, onSelect}})
+      );
+      setTimeout(() => {
+        opacity.setValue(1);
+      }, 400);
+    });
+
   }
 
   return (
@@ -72,11 +87,30 @@ function Item({item, navigation}) {
 class DeckList extends Component {
   constructor() {
     super();
+    this.state = {
+      query: '',
+      opacity: new Animated.Value(0)
+    };
 
+    this.filterDecks = this.filterDecks.bind(this);
+    this.updateList = this.updateList.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
+
+  onSelect = () => {
+    this.updateList();
+  };
 
   componentDidMount() {
     this.updateList();
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 800
+    }).start();
+  }
+
+  filterDecks(query) {
+    this.setState({query});
   }
 
   updateList() {
@@ -85,14 +119,22 @@ class DeckList extends Component {
 
   render() {
     const {decks} = this.props;
+    const {query, opacity} = this.state;
+    const decksToShow = decks.filter((item) => {
+        return item.title && (!query || item.title.includes(query));
+    });
 
     return (
-      <FlatList data={decks}
-                keyExtractor={(item, index) => index}
-                renderItem={({item}) => <Item
-                  item={item}
-                  navigation={this.props.navigation} />}
-                ListHeaderComponent={<SearchBar text={''}/>} />
+      <Animated.View style={{opacity}}>
+        <FlatList data={decksToShow}
+                  keyExtractor={(item, index) => index}
+                  renderItem={({item}) => <Item item={item}
+                                                opacity={opacity}
+                                                onSelect={this.onSelect}
+                                                navigation={this.props.navigation}/>}
+                  ListHeaderComponent={<SearchBar text={this.state.query} filterDecks={this.filterDecks}/>}/>
+      </Animated.View>
+
     );
   }
 }

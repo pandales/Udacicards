@@ -1,4 +1,4 @@
-import { GET_ALL_DECKS, ADD_DECK, REMOVE_DECK} from "./actions";
+import { GET_ALL_DECKS, ADD_DECK, REMOVE_DECK, VIEW_DECK} from "../actions/index";
 
 export default function decks (state = [], action){
   switch (action.type){

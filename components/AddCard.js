@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView,View, Text, StyleSheet, TextInput,
-  Keyboard, TouchableOpacity} from 'react-native';
+import {
+  KeyboardAvoidingView, View, Text, StyleSheet, TextInput,
+  Keyboard, TouchableOpacity
+} from 'react-native';
 import {connect} from 'react-redux';
-import {getAllDecks} from "../actions";
-import {addCard} from "../../utils/api";
-import {gray, lightGray, borderColor, blue, red} from "../../utils/colors";
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import {getAllDecks} from "../actions/index";
+import {addCard} from "../utils/api";
+import {gray, lightGray, borderColor, blue, red} from "../utils/colors";
+import {MaterialIcons, Ionicons} from '@expo/vector-icons';
 
 class AddCard extends Component {
 
-  constructor(){
+  constructor() {
     super();
 
     this.initialState = {
@@ -22,14 +24,14 @@ class AddCard extends Component {
     this.reset = this.reset.bind(this);
   }
 
-  saveCard(){
+  saveCard() {
     Keyboard.dismiss();
     this.setState(this.initialState);
 
     const {updateStore, navigation} = this.props;
     const deck = navigation.state.params.deck;
 
-    if(!deck.cards) deck.cards = [];
+    if (!deck.cards) deck.cards = [];
 
     deck.cards.push(this.state);
     deck.cardsCount = deck.cards.length;
@@ -37,40 +39,45 @@ class AddCard extends Component {
     addCard(deck)
       .then(decks => updateStore(decks));
 
-    navigation.state.params.onSelect({ deck: deck });
+    navigation.state.params.onSelect({deck: deck});
+    //navigation.navigate('ViewDeckTab', {deck: deck});
     navigation.goBack();
   };
 
-  reset(){
+  reset() {
     Keyboard.dismiss();
     this.setState(this.initialState);
   }
 
-  handleQuestionChange(question){
+  handleQuestionChange(question) {
     this.setState({question});
   }
 
-  handleAnswerChange(answer){
+  handleAnswerChange(answer) {
     this.setState({answer});
   }
 
   render() {
 
     const {question, answer} = this.state;
-
+    console.log(this.props.navigation);
     return (
       <KeyboardAvoidingView behavior={'position'} style={styles.container}>
         <Text style={styles.title}> ADD CARD</Text>
         <TextInput
-        style={styles.input}
-        placeholder={'Question'}
-        onChangeText={(text) => {this.handleQuestionChange(text)}}
-        value={question}
-      />
+          style={styles.input}
+          placeholder={'Question'}
+          onChangeText={(text) => {
+            this.handleQuestionChange(text)
+          }}
+          value={question}
+        />
         <TextInput
           style={styles.input}
           placeholder={'Answer'}
-          onChangeText={(text) => {this.handleAnswerChange(text)}}
+          onChangeText={(text) => {
+            this.handleAnswerChange(text)
+          }}
           value={answer}
         />
 

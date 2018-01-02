@@ -4,6 +4,7 @@ export const GET_ALL_DECKS = 'GET_ALL_DECKS';
 export const GET_DECK = 'GET_DECK';
 export const ADD_DECK = 'ADD_DECK';
 export const REMOVE_DECK = 'REMOVE_DECK';
+export const VIEW_DECK = 'VIEW_DECK';
 
 export function getAllDecks (decks) {
 

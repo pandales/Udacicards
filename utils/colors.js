@@ -7,5 +7,5 @@ export const blue = '#4e4cb8';
 export const lightPurp = '#7c53c3';
 export const pink = '#b93fb3';
 export const lightGray = '#f9f9f9';
-export const bordersColor = '#a3c3db';
+export const borderColor = '#a3c3db';
 export const green = '#00ff00';

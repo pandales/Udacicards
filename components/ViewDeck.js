@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {gray, lightGray, borderColor, orange, green} from "../../utils/colors";
-import { MaterialIcons, Ionicons } from '@expo/vector-icons'
+import {gray, orange, green, red} from "../utils/colors";
+import {MaterialIcons, Ionicons} from '@expo/vector-icons'
 import {NavigationActions} from 'react-navigation'
-
 
 class ViewDeck extends Component {
   constructor() {
@@ -11,7 +10,7 @@ class ViewDeck extends Component {
     this.navigateTo = this.navigateTo.bind(this);
   }
 
-  static navigationOptions = ({ navigation, screenProps }) => ({
+  static navigationOptions = ({navigation, screenProps}) => ({
     title: navigation.state.params.deck.title
   });
 
@@ -19,12 +18,12 @@ class ViewDeck extends Component {
     this.setState(data);
   };
 
-  navigateTo(screen, params = {}){
+  navigateTo(screen, params = {}) {
     const {navigation} = this.props;
     params.onSelect = this.onSelect;
 
     navigation && navigation.dispatch(
-      NavigationActions.navigate({ routeName: screen, params: params})
+      NavigationActions.navigate({routeName: screen, params: params})
     );
   }
 
@@ -40,11 +39,13 @@ class ViewDeck extends Component {
             style={[styles.buttons, styles.addCardButton]}>
             <Text style={[styles.buttonsText]}>Add Card</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.navigateTo('QuizView', {deck: deck})}
-            style={[styles.buttons,styles.startQuizButton]}>
-            <Text style={[styles.buttonsText]}>Start Quiz</Text>
-          </TouchableOpacity>
+          {deck.cardsCount
+            ? <TouchableOpacity
+                onPress={() => this.navigateTo('QuizView', {deck: deck})}
+                style={[styles.buttons, styles.startQuizButton]}>
+                <Text style={[styles.buttonsText]}>Start Quiz</Text>
+              </TouchableOpacity>
+            : <Text style={{color:red, marginTop: 5, textAlign: 'center'}}>There is not any card to start a quiz</Text> }
         </View>
       </View>
     );
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
-    padding:20
+    padding: 20
 
   },
   title: {
@@ -78,8 +79,8 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   addCardButton: {
-    backgroundColor:orange
-},
+    backgroundColor: orange
+  },
   startQuizButton: {
     backgroundColor: green,
   },
