@@ -79,7 +79,7 @@ export default class App extends React.Component {
     // clearLocalNotification()
     //   .then(setLocalNotification)
     setLocalNotification();
-    resetStorage();
+   // resetStorage();
   }
 
   render() {
