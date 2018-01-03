@@ -11,7 +11,8 @@ import ViewDeck from "./components/ViewDeck";
 import AddDeck from "./components/AddDeck";
 import AddCard from "./components/AddCard";
 import QuizView from "./components/QuizView";
-import { MaterialCommunityIcons, Ionicons, Entypo} from '@expo/vector-icons'
+import { MaterialCommunityIcons, Ionicons, Entypo} from '@expo/vector-icons';
+import {resetStorage} from "./utils/api";
 
 import { AddButtonInHeader } from './GeneralComponents';
 import { setLocalNotification, clearLocalNotification } from './utils/helpers';
@@ -78,6 +79,7 @@ export default class App extends React.Component {
     // clearLocalNotification()
     //   .then(setLocalNotification)
     setLocalNotification();
+    resetStorage();
   }
 
   render() {

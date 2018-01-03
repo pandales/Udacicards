@@ -1,15 +1,19 @@
 import { AsyncStorage } from 'react-native';
 import { DECK_INDEX, FLASHCARDS_INDEX, createGuid } from "./helpers";
 
-
+export function resetStorage(){
+  return AsyncStorage.removeItem(DECK_INDEX);
+}
 export function getDecks(){
 
  return AsyncStorage.getItem(DECK_INDEX).then(results => {
     if(!results){
-      results = {};
-      AsyncStorage.setItem(DECK_INDEX, JSON.stringify(results));
+      results = [];
+      return AsyncStorage.setItem(DECK_INDEX, JSON.stringify({}))
+        .then(() => results);
+    }else{
+      return JSON.parse(results);
     }
-    return JSON.parse(results);
   });
 }
 
@@ -39,7 +43,6 @@ export function addCard (updatedDeck) {
 
     return decks;
   }).then(decks => {
-    console.log(decks);
     return AsyncStorage.setItem(DECK_INDEX, JSON.stringify(decks)).then(() => decks);
   });
 }

@@ -60,7 +60,7 @@ class AddCard extends Component {
   render() {
 
     const {question, answer} = this.state;
-    console.log(this.props.navigation);
+
     return (
       <KeyboardAvoidingView behavior={'position'} style={styles.container}>
         <Text style={styles.title}> ADD CARD</Text>
